@@ -18,7 +18,7 @@ spec:
         image: index.docker.io/razvanli/repo:hap8
         imagePullPolicy: Always
     # Just spin & wait forever
-        command: [ "/bin/bash", "-ce", "tail -f /dev/null" ]
+#        command: [ "/bin/bash", "-ce", "tail -f /dev/null" ]
 #        command: [ "echo", "SUCCESS" ]
         ports:
         - containerPort: 80
