@@ -1,0 +1,38 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: haproxy
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: haproxy
+    spec:
+      volumes:
+      - name: haproxy
+        configMap:
+          name: haproxy
+      containers:
+      - name: haproxy
+        image: index.docker.io/razvanli/repo:hap8
+        imagePullPolicy: Always
+    # Just spin & wait forever
+        command: [ "/bin/bash", "-ce", "tail -f /dev/null" ]
+#        command: [ "echo", "SUCCESS" ]
+        ports:
+        - containerPort: 80
+          name: http
+        - containerPort: 1936
+          name: stats
+        volumeMounts:
+          - name: haproxy
+            mountPath: /etc/haproxy
+        readinessProbe:
+          initialDelaySeconds: 15
+          periodSeconds: 5
+          timeoutSeconds: 1
+          successThreshold: 2
+          failureThreshold: 2
+          tcpSocket:
+            port: 1936
